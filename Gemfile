@@ -7,5 +7,7 @@ source 'https://rubygems.org'
 ruby '2.7.2'
 
 gem 'minitest'
+gem 'pry-byebug'
 gem 'rubocop'
 gem 'rubocop-minitest'
+gem 'rake'
