@@ -3,6 +3,8 @@
 require 'minitest/autorun'
 require 'timeout'
 
+require_relative '../lib/models/customer_success.rb'
+
 # rubocop:disable Style/Documentation
 class CustomerSuccessBalancing
   def initialize(customer_success, customers, customer_success_away)
@@ -13,8 +15,41 @@ class CustomerSuccessBalancing
 
   # Returns the id of the CustomerSuccess with the most customers
   def execute
-    # Write your solution here
-    nil
+    create_filtered_css_list
+    distribute_customers_to_css
+    get_overloaded_cs
+  end
+
+  private
+
+  def create_filtered_css_list
+    @filtered_css_list = []
+    @customer_success.each do |cs|
+      @filtered_css_list.push( CustomerSuccess.new(cs[:id], cs[:score]) ) unless @customer_success_away.include?(cs[:id])
+    end
+  end
+
+  def distribute_customers_to_css
+    @distributed_customers_to_css = Hash[@filtered_css_list.map {|cs| [cs.level, cs]}]
+    css_levels = @distributed_customers_to_css.keys.sort
+
+    @customers.each do |customer|
+      selected_css_level = css_levels.bsearch { |level| level >= customer[:score] }
+      @distributed_customers_to_css[selected_css_level].add_attended_customer(customer) unless selected_css_level.nil?
+    end
+  end
+
+  def get_overloaded_cs
+    overloaded = @distributed_customers_to_css.values.max do |a, b|
+      a.attended_customers_qty <=> b.attended_customers_qty
+    end
+    
+    overloaded_css_qty = @distributed_customers_to_css.values.count do |css|
+      css.attended_customers_qty == overloaded.attended_customers_qty
+    end
+
+    return 0 if overloaded_css_qty > 1
+    overloaded.id
   end
 end
 
