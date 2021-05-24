@@ -15,12 +15,18 @@ class CustomerSuccessBalancing
 
   # Returns the id of the CustomerSuccess with the most customers
   def execute
+    raise ArgumentError, 'Can\t miss a half customer success agents' if @customer_success_away.count > max_customer_success_away
+
     create_filtered_css_list
     distribute_customers_to_css
     get_overloaded_cs
   end
 
   private
+
+  def max_customer_success_away
+    (@customer_success.count / 2).floor
+  end
 
   def create_filtered_css_list
     @filtered_css_list = []
@@ -102,6 +108,13 @@ class CustomerSuccessBalancingTests < Minitest::Test
     balancer = CustomerSuccessBalancing.new(array_to_map([100, 99, 88, 3, 4, 5]),
                                             array_to_map([10, 10, 10, 20, 20, 30, 30, 30, 20, 60]), [4, 5, 6])
     assert_equal 3, balancer.execute
+  end
+
+  def test_max_css_away
+    css = [{ id: 1, score: 60 }, { id: 2, score: 20 }, { id: 3, score: 95 }, { id: 4, score: 75 }]
+    balancer = CustomerSuccessBalancing.new(css, [], [1, 2, 3])
+
+    assert_raises(ArgumentError, 'Can\t miss a half customer success agents') { balancer.execute }
   end
 
   def array_to_map(arr)
