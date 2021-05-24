@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'timeout'
 
-require_relative '../lib/models/customer_success.rb'
+require_relative '../lib/models/customer_success'
 
 # rubocop:disable Style/Documentation
 class CustomerSuccessBalancing
@@ -15,11 +15,14 @@ class CustomerSuccessBalancing
 
   # Returns the id of the CustomerSuccess with the most customers
   def execute
-    raise ArgumentError, 'Can\t miss a half customer success agents' if @customer_success_away.count > max_customer_success_away
+    if @customer_success_away.count > max_customer_success_away
+      raise ArgumentError,
+            'Can\t miss a half customer success agents'
+    end
 
     create_filtered_css_list
     distribute_customers_to_css
-    get_overloaded_cs
+    find_overloaded_cs
   end
 
   private
@@ -31,12 +34,15 @@ class CustomerSuccessBalancing
   def create_filtered_css_list
     @filtered_css_list = []
     @customer_success.each do |cs|
-      @filtered_css_list.push( CustomerSuccess.new(cs[:id], cs[:score]) ) unless @customer_success_away.include?(cs[:id])
+      unless @customer_success_away.include?(cs[:id])
+        @filtered_css_list.push(CustomerSuccess.new(cs[:id],
+                                                    cs[:score]))
+      end
     end
   end
 
   def distribute_customers_to_css
-    @distributed_customers_to_css = Hash[@filtered_css_list.map {|cs| [cs.level, cs]}]
+    @distributed_customers_to_css = Hash[@filtered_css_list.map { |cs| [cs.level, cs] }]
     css_levels = @distributed_customers_to_css.keys.sort
 
     @customers.each do |customer|
@@ -45,16 +51,17 @@ class CustomerSuccessBalancing
     end
   end
 
-  def get_overloaded_cs
+  def find_overloaded_cs
     overloaded = @distributed_customers_to_css.values.max do |a, b|
       a.attended_customers_qty <=> b.attended_customers_qty
     end
-    
+
     overloaded_css_qty = @distributed_customers_to_css.values.count do |css|
       css.attended_customers_qty == overloaded.attended_customers_qty
     end
 
     return 0 if overloaded_css_qty > 1
+
     overloaded.id
   end
 end

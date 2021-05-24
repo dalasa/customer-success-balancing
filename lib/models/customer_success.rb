@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# represents a CustomerSuccess with its characteristics
 class CustomerSuccess
   attr_reader :id, :level, :attended_customers_qty, :attended_customers
 

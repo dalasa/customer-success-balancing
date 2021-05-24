@@ -8,6 +8,6 @@ ruby '2.7.2'
 
 gem 'minitest'
 gem 'pry-byebug'
+gem 'rake'
 gem 'rubocop'
 gem 'rubocop-minitest'
-gem 'rake'

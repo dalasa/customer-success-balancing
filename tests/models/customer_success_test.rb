@@ -54,7 +54,7 @@ describe CustomerSuccess do
     it 'count +1 on attended customers quantity' do
       subject
       _(cs.attended_customers_qty).must_equal(1)
-    end    
+    end
   end
 end
 # rubocop:enable Metrics/BlockLength
