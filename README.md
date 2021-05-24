@@ -12,6 +12,6 @@ Eu utilizei recursos de filtro e ordenação da própria linguagem, que são efi
 Acho que a única coisa que talvez deva ser melhor explicada é que na hora de distribuir os clientes pelos CSs, vali-me da premissa de que todos os CSs tem níveis diferentes para poder executar uma busca suficientemente eficiente para a distribuição (linhas 46 e 49 do arquivo customer_success_balancing.rb).
 
 ## Considerações finais
-Agradeço a oportunidade e foi muito uma experiência legal fazer esse teste.
+Agradeço a oportunidade e foi uma experiência muito legal fazer esse teste.
 
 Até logo!
