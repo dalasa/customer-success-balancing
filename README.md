@@ -1,23 +1,17 @@
-objetivo: balanceamento de gerentes e clientes - distribuir clientes entre os gerentes de capacidade mais próxima (maior)
+# Customer success balancing
 
+Olá, meu nome é Daniel Landi Santos e essa é a minha solução do teste proposto.
+A solução foi feita utilizando ***ruby 2.7.2***, e deixei uma rake também pronta para executar os testes, bastando rodar `rake test`.
 
-(pressupõe uma distribuição baseada no nível maior mais próximo, preciso de um método eficiente de sort aqui para avaliar qual o maior mais próximo)
+## Sobre a solução
 
+Avaliando o teste e procurando manter a simplicidade na solução, implementei apenas uma classe com características de model, para modelar o Customer Success e auxiliar na distribuição e contagem de quantos clientes eles estão atendendo.
+O restante da solução foi implementado mesmo na classe base proposta pelo teste, a *CustomerSuccessBalancing*.
+Eu gosto de separar os passos em outros métodos, para facilitar tanto a  leitura quanto a manutenção do código, por isso no método `execute` da classe, existem apenas chamadas para os métodos que realmente fazem a magia acontecer.
+Eu utilizei recursos de filtro e ordenação da própria linguagem, que são eficientes o bastante pelo proposto, e tornam o código simples de entender.
+Acho que a única coisa que talvez deva ser melhor explicada é que na hora de distribuir os clientes pelos CSs, vali-me da premissa de que todos os CSs tem níveis diferentes para poder executar uma busca suficientemente eficiente para a distribuição (linhas 46 e 49 do arquivo customer_success_balancing.rb).
 
+## Considerações finais
+Agradeço a oportunidade e foi muito uma experiência legal fazer esse teste.
 
-
-Classes:
-
-CustumerSuccess (qtd de 0-1.000)
-- nível (0-10.000)
-- id (0-1.000)
-
-
-Clientes (qtd de 0-1.000.000)
-- tamanho (0-100.000)
-- id (0-1.000.000)
-
-
-*O NÚMERO DE CS FORA É NO MÁXIMO METADE DELES*
-
--> O Retorno esperado é o ID do CS que está com mais clientes
+Até logo!
